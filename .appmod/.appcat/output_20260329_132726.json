@@ -1,0 +1,249 @@
+{
+  "version": "1.0.0",
+  "producer": ".NET AppCAT CLI",
+  "metadata": {
+    "analysisStartTime": "2026-03-29T18:27:58.7824024Z",
+    "analysisEndTime": "2026-03-29T18:28:04.7604392Z",
+    "privacyMode": "Protected",
+    "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2271074",
+    "targetIds": [
+      "AppService.Windows",
+      "AppService.Linux",
+      "AKS.Linux",
+      "AKS.Windows",
+      "ACA",
+      "AppServiceContainer.Linux",
+      "AppServiceContainer.Windows",
+      "AppServiceManagedInstance.Windows"
+    ],
+    "targetDisplayNames": [
+      "Azure App Service",
+      "Azure Kubernetes Service",
+      "Azure Container Apps",
+      "Azure App Service Container",
+      "Azure App Service Managed Instance"
+    ],
+    "os": [
+      "windows",
+      "linux"
+    ]
+  },
+  "summary": {
+    "totalProjects": 4,
+    "totalIssues": 2,
+    "totalIncidents": 2,
+    "totalEffort": 8,
+    "charts": {
+      "severity": {
+        "mandatory": 0,
+        "optional": 1,
+        "potential": 1,
+        "information": 0
+      },
+      "category": {
+        "Connection": 1,
+        "Dockerfile": 1
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "SportsLeague.API\\SportsLeague.API.csproj",
+      "issues": 1,
+      "storyPoints": 3,
+      "properties": {
+        "appName": "SportsLeague.API",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "incidents": [
+        {
+          "ruleId": "Connection.0001",
+          "incidentId": "0a0f0e91-6d26-455c-9338-ddf8aca6b859",
+          "location": "SportsLeague.API\\appsettings.json",
+          "locationKind": "File",
+          "snippet": "DefaultConnection",
+          "targets": {
+            "AppService.Windows": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "AppService.Linux": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "AKS.Linux": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "AKS.Windows": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "ACA": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "AppServiceContainer.Linux": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "AppServiceContainer.Windows": {
+              "effort": 3,
+              "severity": "potential"
+            },
+            "AppServiceManagedInstance.Windows": {
+              "effort": 3,
+              "severity": "potential"
+            }
+          },
+          "labels": []
+        }
+      ]
+    },
+    {
+      "path": "SportsLeague.DataAccess\\SportsLeague.DataAccess.csproj",
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "SportsLeague.DataAccess",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "incidents": []
+    },
+    {
+      "path": "SportsLeague.Domain\\SportsLeague.Domain.csproj",
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "SportsLeague.Domain",
+        "frameworks": [
+          "net9.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "incidents": []
+    },
+    {
+      "path": ".",
+      "issues": 1,
+      "storyPoints": 5,
+      "properties": {
+        "appName": "",
+        "frameworks": [],
+        "languages": [
+          ""
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "incidents": [
+        {
+          "ruleId": "Dockerfile.0101",
+          "incidentId": "601f6d18-1cbd-4d8e-8278-448d4001090c",
+          "location": ".",
+          "locationKind": "file",
+          "message": "File(s) missing",
+          "snippet": "",
+          "targets": {
+            "AppService.Windows": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "AppService.Linux": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "AKS.Linux": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "AKS.Windows": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "ACA": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "AppServiceContainer.Linux": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "AppServiceContainer.Windows": {
+              "effort": 5,
+              "severity": "optional"
+            },
+            "AppServiceManagedInstance.Windows": {
+              "effort": 5,
+              "severity": "optional"
+            }
+          },
+          "labels": []
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "Connection.0001": {
+      "id": "Connection.0001",
+      "description": "Connection string detected. It may not be available when your app is migrated to Azure.\n\nReview and ensure it works from Azure. If you are connecting to a database, you might need to migrate the database to Azure. There are multiple ways to do it:\n    1. Migrate to Azure SQL Database for additional benefits (see the link below).\n    2. Consider Azure SQL Managed Instance if you need features that are not available in Azure SQL Database and you don\u2019t want to use a VM.\n    3. Migrate your database servers directly to SQL Server on Azure VMs.\n\nTo assess database migration effort, you can use Azure Migrate tool, see the link below.",
+      "title": "Connection string is detected",
+      "severity": "potential",
+      "effort": 3,
+      "links": [
+        {
+          "title": "Migrate SQL Server database to Azure",
+          "url": "https://go.microsoft.com/fwlink/?LinkID=2251731"
+        },
+        {
+          "title": "Azure SQL Managed Instance",
+          "url": "https://go.microsoft.com/fwlink/?LinkID=2251613"
+        },
+        {
+          "title": "Azure Migrate",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2252410"
+        }
+      ],
+      "labels": []
+    },
+    "Dockerfile.0101": {
+      "id": "Dockerfile.0101",
+      "description": "Ensure Dockerfile exists in the repository",
+      "title": "Dockerfile Missing",
+      "severity": "optional",
+      "effort": 5,
+      "links": [
+        {
+          "title": "docker",
+          "url": "https://docker.com"
+        }
+      ],
+      "labels": [
+        "domain=cloud-readiness",
+        "category=docker-containerization"
+      ]
+    }
+  }
+}
