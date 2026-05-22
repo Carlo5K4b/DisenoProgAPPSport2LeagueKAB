@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SportsLeague.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class DBCreationAndEntities : Migration
+    public partial class DBNewCreationAndEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -289,7 +289,7 @@ namespace SportsLeague.DataAccess.Migrations
                     MatchId = table.Column<int>(type: "int", nullable: false),
                     PlayerId = table.Column<int>(type: "int", nullable: false),
                     IsStarder = table.Column<bool>(type: "bit", nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -376,10 +376,11 @@ namespace SportsLeague.DataAccess.Migrations
                 column: "TournamentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchLineups_MatchId",
+                name: "IX_MatchLineups_MatchId_PlayerId",
                 schema: "dbo",
                 table: "MatchLineups",
-                column: "MatchId");
+                columns: new[] { "MatchId", "PlayerId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatchLineups_PlayerId",

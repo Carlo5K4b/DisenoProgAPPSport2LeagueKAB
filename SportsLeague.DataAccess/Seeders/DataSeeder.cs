@@ -47,10 +47,17 @@ namespace SportsLeague.DataAccess.Seeders
 
             // 1. Atlético Nacional
             new[] {
-                ("David", "Ospina", PlayerPosition.Goalkeeper, 1),
-                ("William", "Tesillo", PlayerPosition.Defender, 3),
-                ("Edwin", "Cardona", PlayerPosition.Midfielder, 10),
-                ("Alfredo", "Morelos", PlayerPosition.Forward, 9),
+               ("David", "Ospina", PlayerPosition.Goalkeeper, 1),
+               ("William", "Tesillo", PlayerPosition.Defender, 3),
+               ("Andrés", "Román", PlayerPosition.Defender, 6),
+               ("Samuel", "Velásquez", PlayerPosition.Defender, 18),
+               ("Cristian", "Zapata", PlayerPosition.Defender, 2),
+               ("Jorman", "Campuzano", PlayerPosition.Midfielder, 8),
+               ("Edwin", "Cardona", PlayerPosition.Midfielder, 10),
+               ("Kevin", "Cataño", PlayerPosition.Midfielder, 20),
+               ("Marino", "Hinestroza", PlayerPosition.Forward, 11),
+               ("Andrés", "Sarmiento", PlayerPosition.Forward, 7),
+               ("Alfredo", "Morelos", PlayerPosition.Forward, 9),
             },
             // 2. Independiente Medellín
             new[] {
@@ -239,6 +246,29 @@ namespace SportsLeague.DataAccess.Seeders
                 });
             }
             await context.SaveChangesAsync();
+
+
+            // ═══ 6. DATOS ADICIONALES PARA PRUEBAS DE MATCHLINEUP ═══
+            
+            var scheduledMatch = new Match
+            {
+                HomeTeamId = teams[0].Id, // Atlético Nacional
+                AwayTeamId = teams[1].Id, // Independiente Medellín
+                TournamentId = tournament.Id,
+                RefereeId = referees[0].Id,
+                MatchDate = DateTime.UtcNow.AddDays(5),
+                Status = MatchStatus.Scheduled
+            };
+
+            var finishedMatch = new Match
+            {
+                HomeTeamId = teams[2].Id, // América de Cali
+                AwayTeamId = teams[3].Id, // Deportivo Cali
+                TournamentId = tournament.Id,
+                RefereeId = referees[1].Id,
+                MatchDate = DateTime.UtcNow.AddDays(-5),
+                Status = MatchStatus.Finished
+            };
         }
     }
 }

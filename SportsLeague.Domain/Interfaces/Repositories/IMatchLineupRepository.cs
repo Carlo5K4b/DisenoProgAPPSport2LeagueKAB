@@ -4,9 +4,9 @@ namespace SportsLeague.Domain.Interfaces.Repositories
 {
     public interface IMatchLineupRepository : IGenericRepository<MatchLineup>
     {
-        Task<IEnumerable<MatchLineup>> GetByMatchIdAsync(int matchId);
-        Task<IEnumerable<MatchLineup>> GetByPlayerIdAsync(int playerId);
-        Task<MatchLineup?> GetByMatchAndPlayerAsync(int matchId, int playerId);
+        Task<IEnumerable<MatchLineup>> GetByMatchAsync(int matchId);
+        Task<IEnumerable<MatchLineup>> GetByMatchAndTeamAsync(int matchId, int teamId);
+        Task<bool> ExistsByMatchAndPlayerAsync(int matchId, int playerId);
 
     }
 

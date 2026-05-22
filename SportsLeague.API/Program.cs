@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportsLeague.DataAccess.Context;
 using SportsLeague.DataAccess.Repositories;
-//using SportsLeague.DataAccess.Seeders;
+using SportsLeague.DataAccess.Seeders;
 using SportsLeague.Domain.Helpers;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
@@ -61,7 +61,7 @@ using (var scope = app.Services.CreateScope())
         .GetRequiredService<LeagueDbContext>();
 
     await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
-                                           // await DataSeeder.SeedAsync(context);
+    await DataSeeder.SeedAsync(context);
 }
 
 

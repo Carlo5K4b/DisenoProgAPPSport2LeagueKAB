@@ -12,8 +12,8 @@ using SportsLeague.DataAccess.Context;
 namespace SportsLeague.DataAccess.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20260521222637_DBCreationAndEntities")]
-    partial class DBCreationAndEntities
+    [Migration("20260522204025_DBNewCreationAndEntities")]
+    partial class DBNewCreationAndEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,16 +173,18 @@ namespace SportsLeague.DataAccess.Migrations
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchId");
-
                     b.HasIndex("PlayerId");
+
+                    b.HasIndex("MatchId", "PlayerId")
+                        .IsUnique();
 
                     b.ToTable("MatchLineups", "dbo");
                 });

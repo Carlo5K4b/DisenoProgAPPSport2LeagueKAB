@@ -15,26 +15,35 @@ namespace SportsLeague.DataAccess.Repositories
         public async Task<IEnumerable<MatchLineup>> GetByMatchIdAsync(int matchId)
         {
             return await _dbSet
-                .Include(ts => ts.Player)
-                .Include(ts => ts.Match)
-                .Where(ts => ts.MatchId == matchId)
+                .Include(ml => ml.Player)
+                .Include(ml => ml.Match)
+                .Where(ml => ml.MatchId == matchId)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<MatchLineup>> GetByPlayerIdAsync(int playerId)
+    
+        public async Task<IEnumerable<MatchLineup>> GetByMatchAsync(int matchId)
         {
             return await _dbSet
-                .Include(ts => ts.Match)
-                .Include(ts => ts.Player)
-                .Where(ts => ts.PlayerId == playerId)
+                .Where(ml => ml.MatchId == matchId)
+                .Include(ml => ml.Player) 
+                .OrderBy(ml => ml.IsStarder) 
                 .ToListAsync();
         }
 
-        public async Task<MatchLineup?> GetByMatchAndPlayerAsync(int matchId, int playerId)
+        public async Task<IEnumerable<MatchLineup>> GetByMatchAndTeamAsync(int matchId, int teamId)
         {
             return await _dbSet
-                .FirstOrDefaultAsync(ts => ts.MatchId == matchId
-                                        && ts.PlayerId == playerId);
+                .Where(ml => ml.MatchId == matchId && ml.Player.TeamId == teamId)
+                .Include(ml => ml.Player)
+                .ThenInclude(p => p.Team)
+                .ToListAsync();
+        }
+
+        public async Task<bool> ExistsByMatchAndPlayerAsync(int matchId, int playerId)
+        {
+
+            return await _dbSet.AnyAsync(ml => ml.MatchId == matchId && ml.PlayerId == playerId);
         }
     }
 }

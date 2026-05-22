@@ -170,16 +170,18 @@ namespace SportsLeague.DataAccess.Migrations
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchId");
-
                     b.HasIndex("PlayerId");
+
+                    b.HasIndex("MatchId", "PlayerId")
+                        .IsUnique();
 
                     b.ToTable("MatchLineups", "dbo");
                 });

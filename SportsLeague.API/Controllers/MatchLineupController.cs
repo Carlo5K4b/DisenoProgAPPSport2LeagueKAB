@@ -5,90 +5,73 @@ using SportsLeague.API.DTOs.Response;
 using SportsLeague.Domain.Entities;
 using SportsLeague.Domain.Interfaces.Services;
 
-namespace SportsLeague.API.Controllers
+namespace SportsLeague.API.Controllers;
+[ApiController]
+[Route("api/match/{matchId}/matchLineup")]
+public class MatchLineupController : ControllerBase
 {
-    [ApiController]
-[Route("api/match/{matchId}/lineup")]
+    private readonly IMatchLineupService _matchLineupService;
+    private readonly IMapper _mapper;
 
-    public class MatchLineupController : ControllerBase
+    public MatchLineupController(IMatchLineupService matchLineupService, IMapper mapper)
     {
-        private readonly IMatchLineupService _matchLineupService;
-        private readonly IMapper _mapper;
-        public MatchLineupController(
-            IMatchLineupService matchLineupService,
-            IMapper mapper)
+        _matchLineupService = matchLineupService;
+        _mapper = mapper;
+    }
 
+    [HttpPost]
+    public async Task<ActionResult<MatchLineupResponseDTO>> RegisterPlayer(int matchId, MatchLineupRequestDTO dto)
+    {
+        try
         {
-            _matchLineupService = matchLineupService;
-            _mapper = mapper;
+            var lineup = _mapper.Map<MatchLineup>(dto);
+            lineup.MatchId = matchId;
 
+            var created = await _matchLineupService.RegisterPlayerToLineupAsync(lineup);
+
+            var fullLineup = await _matchLineupService.GetByLineupMatchAsync(matchId);
+            var createdPlayer = fullLineup.First(x => x.Id == created.Id);
+
+            return CreatedAtAction(nameof(GetMatchLineup), new { matchId }, _mapper.Map<MatchLineupResponseDTO>(createdPlayer));
         }
-
-        // POST api/MatchLineup/{id}
-        [HttpPost("{id}/player")]
-        public async Task<ActionResult<MatchLineupResponseDTO>> RegisterMatchLineup(
-     int id, MatchLineupRequestDTO dto)
+        catch (InvalidOperationException ex)
         {
-            try
-            {
-                // Use the correct method signature: RegisterPlayerAsync(int matchId, int playerId)
-                var created = await _matchLineupService.RegisterPlayerAsync(id, dto.PlayerId);
-                var responseDTO = _mapper.Map<MatchLineupResponseDTO>(created);
-                return CreatedAtAction(nameof(GetPlayer), new { id }, responseDTO);
-
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new { message = ex.Message });
-            }
+            return Conflict(new { message = ex.Message });
         }
+    }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineup(int matchId)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineup(int matchId)
+    {
+        var lineup = await _matchLineupService.GetByLineupMatchAsync(matchId);
+        return Ok(_mapper.Map<IEnumerable<MatchLineupResponseDTO>>(lineup));
+    }
+
+    [HttpGet("team/{teamId}")]
+    public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineupByTeam(int matchId, int teamId)
+    {
+        try
         {
-            var lineup = await _matchLineupService.GetLineupByMatchAsync(matchId);
-            return Ok(_mapper.Map<IEnumerable<MatchLineupResponseDTO>>(lineup));
+            var matchLineup = await _matchLineupService.GetByMatchAndTeamAsync(matchId, teamId);
+            return Ok(_mapper.Map<IEnumerable<MatchLineupResponseDTO>>(matchLineup));
         }
-
-        [HttpGet("team/{teamId}")]
-        public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineupByTeam(int matchId, int teamId)
+        catch (KeyNotFoundException ex)
         {
-            try
-            {
-                var lineup = await _matchLineupService.GetLineupByMatchAsync(matchId);
-                return Ok(_mapper.Map<IEnumerable<MatchLineupResponseDTO>>(lineup));
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            return NotFound(new { message = ex.Message });
         }
+    }
 
-        // GET api/MatchLineup/{id}
-        [HttpGet("{id}/player")]
-        public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetPlayer(int id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> RemovePlayer(int id)
+    {
+        try
         {
-            var players = await _matchLineupService.GetPlayerByMatchAsync(id);
-            return Ok(_mapper.Map<IEnumerable<MatchLineupResponseDTO>>(players));
+            await _matchLineupService.RemovePlayerFromLineupAsync(id);
+            return NoContent();
         }
-
-        // DELETE api/MatchLineup/{tid}
-        [HttpDelete("{id}/player/{tid}")]
-        public async Task<ActionResult> RemoveFromPlayer(int id, int tid)
+        catch (KeyNotFoundException ex)
         {
-            try
-            {
-                await _matchLineupService.RemoveFromPlayerAsync(id, tid);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            return NotFound(new { message = ex.Message });
         }
     }
 }

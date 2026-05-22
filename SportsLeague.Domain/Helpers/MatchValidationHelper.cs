@@ -54,5 +54,10 @@ namespace SportsLeague.Domain.Helpers
                 throw new InvalidOperationException(
                     "El minuto debe estar entre 1 y 120");
         }
+
+        internal void ValidatePlayerInMatch(Match match, Player player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

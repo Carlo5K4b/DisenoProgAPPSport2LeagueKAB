@@ -304,19 +304,30 @@ namespace SportsLeague.DataAccess.Context
             // ── MatchLineup Configuration ──
             modelBuilder.Entity<MatchLineup>(entity =>
             {
-                // Explicitly include schema to avoid schema/name mismatches
-                entity.ToTable("MatchLineups", "dbo");
                 entity.HasKey(ml => ml.Id);
 
-                entity.HasOne(ml => ml.Match)
-                      .WithMany(m => m.MatchLineups)
-                      .HasForeignKey(ml => ml.MatchId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(ml => ml.Position)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.HasOne(ml => ml.Player)
-                      .WithMany(p => p.MatchLineups)
-                      .HasForeignKey(ml => ml.PlayerId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                entity.Property(ml => ml.IsStarder)
+                    .IsRequired();
+
+                // Relación con Match (Si se elimina el partido, se elimina la alineación)
+                entity.HasOne(ml => ml.Match)
+                    .WithMany()
+                    .HasForeignKey(ml => ml.MatchId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Relación con Player (Restrict: No permite borrar un jugador si está en una alineación)
+                entity.HasOne(ml => ml.Match)
+                    .WithMany(m => m.MatchLineups)
+                    .HasForeignKey(ml => ml.MatchId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Garantiza que MatchId + PlayerId no se repitan en la tabla
+                entity.HasIndex(ml => new { ml.MatchId, ml.PlayerId })
+                    .IsUnique();
             });
         }
     }
