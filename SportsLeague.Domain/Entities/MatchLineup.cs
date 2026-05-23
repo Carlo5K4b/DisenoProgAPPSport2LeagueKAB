@@ -6,7 +6,7 @@ namespace SportsLeague.Domain.Entities
     {
         public int MatchId { get; set; }
         public int PlayerId { get; set; }
-        public bool IsStarder { get; set; } = true;// false= suplente,  true= titular
+        public bool IsStarter { get; set; } = true;// false= suplente,  true= titular
         public string Position { get; set; } = string.Empty;
         public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
 

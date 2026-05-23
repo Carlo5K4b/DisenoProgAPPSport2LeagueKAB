@@ -156,7 +156,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsStarder")
+                    b.Property<bool>("IsStarter")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinedAt")
@@ -183,7 +183,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasIndex("MatchId", "PlayerId")
                         .IsUnique();
 
-                    b.ToTable("MatchLineups", "dbo");
+                    b.ToTable("MatchLineups");
                 });
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.MatchResult", b =>
@@ -578,7 +578,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasOne("SportsLeague.Domain.Entities.Player", "Player")
                         .WithMany("MatchLineups")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Match");

@@ -6,14 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SportsLeague.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class DBNewCreationAndEntities : Migration
+    public partial class DBCreationNewAndEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "dbo");
-
             migrationBuilder.CreateTable(
                 name: "Referees",
                 columns: table => new
@@ -281,14 +278,13 @@ namespace SportsLeague.DataAccess.Migrations
 
             migrationBuilder.CreateTable(
                 name: "MatchLineups",
-                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MatchId = table.Column<int>(type: "int", nullable: false),
                     PlayerId = table.Column<int>(type: "int", nullable: false),
-                    IsStarder = table.Column<bool>(type: "bit", nullable: false),
+                    IsStarter = table.Column<bool>(type: "bit", nullable: false),
                     Position = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -308,7 +304,7 @@ namespace SportsLeague.DataAccess.Migrations
                         column: x => x.PlayerId,
                         principalTable: "Players",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -377,14 +373,12 @@ namespace SportsLeague.DataAccess.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatchLineups_MatchId_PlayerId",
-                schema: "dbo",
                 table: "MatchLineups",
                 columns: new[] { "MatchId", "PlayerId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatchLineups_PlayerId",
-                schema: "dbo",
                 table: "MatchLineups",
                 column: "PlayerId");
 
@@ -445,8 +439,7 @@ namespace SportsLeague.DataAccess.Migrations
                 name: "Goals");
 
             migrationBuilder.DropTable(
-                name: "MatchLineups",
-                schema: "dbo");
+                name: "MatchLineups");
 
             migrationBuilder.DropTable(
                 name: "MatchResults");

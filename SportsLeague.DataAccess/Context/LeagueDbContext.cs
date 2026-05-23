@@ -310,7 +310,7 @@ namespace SportsLeague.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(ml => ml.IsStarder)
+                entity.Property(ml => ml.IsStarter)
                     .IsRequired();
 
                 // Relación con Match (Si se elimina el partido, se elimina la alineación)

@@ -12,8 +12,8 @@ using SportsLeague.DataAccess.Context;
 namespace SportsLeague.DataAccess.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20260522204025_DBNewCreationAndEntities")]
-    partial class DBNewCreationAndEntities
+    [Migration("20260523001637_DBCreationNewAndEntities")]
+    partial class DBCreationNewAndEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,7 +159,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsStarder")
+                    b.Property<bool>("IsStarter")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinedAt")
@@ -186,7 +186,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasIndex("MatchId", "PlayerId")
                         .IsUnique();
 
-                    b.ToTable("MatchLineups", "dbo");
+                    b.ToTable("MatchLineups");
                 });
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.MatchResult", b =>
@@ -581,7 +581,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasOne("SportsLeague.Domain.Entities.Player", "Player")
                         .WithMany("MatchLineups")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Match");

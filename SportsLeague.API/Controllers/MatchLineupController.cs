@@ -7,7 +7,7 @@ using SportsLeague.Domain.Interfaces.Services;
 
 namespace SportsLeague.API.Controllers;
 [ApiController]
-[Route("api/match/{matchId}/matchLineup")]
+[Route("api/match/{matchId}")]
 public class MatchLineupController : ControllerBase
 {
     private readonly IMatchLineupService _matchLineupService;
@@ -20,14 +20,14 @@ public class MatchLineupController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MatchLineupResponseDTO>> RegisterPlayer(int matchId, MatchLineupRequestDTO dto)
+    public async Task<ActionResult<MatchLineupResponseDTO>> AddPlayer(int matchId, MatchLineupRequestDTO dto)
     {
         try
         {
             var lineup = _mapper.Map<MatchLineup>(dto);
             lineup.MatchId = matchId;
 
-            var created = await _matchLineupService.RegisterPlayerToLineupAsync(lineup);
+            var created = await _matchLineupService.AddPlayerToLineupAsync(lineup);
 
             var fullLineup = await _matchLineupService.GetByLineupMatchAsync(matchId);
             var createdPlayer = fullLineup.First(x => x.Id == created.Id);
@@ -39,7 +39,6 @@ public class MatchLineupController : ControllerBase
             return Conflict(new { message = ex.Message });
         }
     }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineup(int matchId)
     {
