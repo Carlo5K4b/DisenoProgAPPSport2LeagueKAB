@@ -23,30 +23,30 @@ public class MatchLineupService : IMatchLineupService
         _logger = logger;
     }
 
-    public async Task<MatchLineup> AddPlayerToLineupAsync(MatchLineup lineup)
+    public async Task<MatchLineup> RgisterPlayerToLineupAsync(MatchLineup matchLineup)
     {
         var match = await _validationHelper
-            .ValidateMatchForEventAsync(lineup.MatchId);
+            .ValidateMatchForEventAsync(matchLineup.MatchId);
 
         if (match.Status != MatchStatus.Scheduled)
             throw new InvalidOperationException(
                 "Solo se pueden registrar alineaciones en partidos Scheduled");
 
         var player = await _validationHelper
-            .ValidatePlayerInMatchAsync(lineup.PlayerId, match);
+            .ValidatePlayerInMatchAsync(matchLineup.PlayerId, match);
 
         if (await _matchLineupRepository
-            .ExistsByMatchAndPlayerAsync(lineup.MatchId, lineup.PlayerId))
+            .ExistsByMatchAndPlayerAsync(matchLineup.MatchId, matchLineup.PlayerId))
         {
             throw new InvalidOperationException(
                 "El jugador ya está registrado en la alineación de este partido");
         }
 
-        if (lineup.IsStarter)
+        if (matchLineup.IsStarter)
         {
             var currentLineup =
                 await _matchLineupRepository
-                    .GetByMatchAndTeamAsync(lineup.MatchId, player.TeamId);
+                    .GetByMatchAndTeamAsync(matchLineup.MatchId, player.TeamId);
 
             if (currentLineup.Count(x => x.IsStarter) >= 11)
             {
@@ -57,11 +57,11 @@ public class MatchLineupService : IMatchLineupService
 
         _logger.LogInformation(
             "Agregando jugador {PlayerId} al partido {MatchId} como {Position}",
-            lineup.PlayerId,
-            lineup.MatchId,
-            lineup.Position);
+            matchLineup.PlayerId,
+            matchLineup.MatchId,
+            matchLineup.Position);
 
-        return await _matchLineupRepository.CreateAsync(lineup);
+        return await _matchLineupRepository.CreateAsync(matchLineup);
     }
 
     public async Task<IEnumerable<MatchLineup>> GetByLineupMatchAsync(int matchId)

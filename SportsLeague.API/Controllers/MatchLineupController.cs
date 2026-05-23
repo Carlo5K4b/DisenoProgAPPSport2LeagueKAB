@@ -21,14 +21,14 @@ public class MatchLineupController : ControllerBase
 
     [HttpPost("matchLineup")]
     
-    public async Task<ActionResult<MatchLineupResponseDTO>> AddPlayer(int matchId, MatchLineupRequestDTO dto)
+    public async Task<ActionResult<MatchLineupResponseDTO>> RegisterPlayer(int matchId, MatchLineupRequestDTO dto)
     {
         try
         {
             var lineup = _mapper.Map<MatchLineup>(dto);
             lineup.MatchId = matchId;
 
-            var created = await _matchLineupService.AddPlayerToLineupAsync(lineup);
+            var created = await _matchLineupService.RgisterPlayerToLineupAsync(lineup);
 
             var fullLineup = await _matchLineupService.GetByLineupMatchAsync(matchId);
             var createdPlayer = fullLineup.First(x => x.Id == created.Id);
