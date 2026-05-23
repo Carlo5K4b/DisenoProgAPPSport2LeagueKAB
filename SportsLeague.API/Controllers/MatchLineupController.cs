@@ -19,7 +19,8 @@ public class MatchLineupController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost]
+    [HttpPost("matchLineup")]
+    
     public async Task<ActionResult<MatchLineupResponseDTO>> AddPlayer(int matchId, MatchLineupRequestDTO dto)
     {
         try
@@ -39,13 +40,17 @@ public class MatchLineupController : ControllerBase
             return Conflict(new { message = ex.Message });
         }
     }
-    [HttpGet]
+
+    [HttpGet("matchLineup")]
+    //[HttpGet]
     public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineup(int matchId)
     {
         var lineup = await _matchLineupService.GetByLineupMatchAsync(matchId);
         return Ok(_mapper.Map<IEnumerable<MatchLineupResponseDTO>>(lineup));
     }
 
+ 
+  
     [HttpGet("team/{teamId}")]
     public async Task<ActionResult<IEnumerable<MatchLineupResponseDTO>>> GetMatchLineupByTeam(int matchId, int teamId)
     {

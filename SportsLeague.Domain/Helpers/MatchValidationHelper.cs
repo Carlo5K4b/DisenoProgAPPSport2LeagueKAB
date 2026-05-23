@@ -26,10 +26,10 @@ namespace SportsLeague.Domain.Helpers
                 throw new KeyNotFoundException(
                     $"No se encontró el partido con ID {matchId}");
 
-            if (match.Status != MatchStatus.InProgress
-                && match.Status != MatchStatus.Finished)
+            if (match.Status == MatchStatus.Finished)
                 throw new InvalidOperationException(
-                    "Solo se pueden registrar eventos en partidos InProgress o Finished");
+                    "No se pueden modificar alineaciones en partidos finalizados");
+        
 
             return match;
         }
